@@ -43,7 +43,7 @@ pipelineJob(jobName) {
 //Generate properties file
 new File("/var/jenkins_home/workspace/${pipelineFolderName}/properties").mkdirs()  
 def propsFile = new File("/var/jenkins_home/workspace/${pipelineFolderName}/properties/config.properties")
-propsFile.write("gitURL=${gitURL}\npipelineType=${pipelineType}\npipelineName=${pipelineName}\npipelinePath=${pipelinePath}\nslavePath=/home/jenkins/workspace/${pipelineFolderName}")
+propsFile.write("gitURL=${gitURL}\npipelineType=${pipelineType}\npipelineName=${pipelineName}\npipelinePath=${pipelinePath}\nslavePath=/home/jenkins/workspace/${jobName}")
 
 //Run new pipeline
 queue(jobName)
