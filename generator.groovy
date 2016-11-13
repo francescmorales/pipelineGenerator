@@ -30,9 +30,12 @@ pipelineJob(jobName) {
 			scm{
 				git{
 					branch("*/develop")
+//					remote{
+//						url("ssh://git@192.168.99.100:7999/ci/jenkins-files.git")
+//						credentials("2abfdf7f-4945-4d12-b760-e1e1da6dc8a7")	
+//					}
 					remote{
-						url("ssh://git@192.168.99.100:7999/ci/jenkins-files.git")
-						credentials("2abfdf7f-4945-4d12-b760-e1e1da6dc8a7")	
+						url("https://github.com/francescmorales/jenkinsfiles")
 					}
 				}
 			}
