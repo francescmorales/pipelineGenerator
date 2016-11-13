@@ -35,7 +35,7 @@ pipelineJob(jobName) {
 //						credentials("2abfdf7f-4945-4d12-b760-e1e1da6dc8a7")	
 //					}
 					remote{
-						url("https://github.com/francescmorales/jenkinsfiles")
+						url("https://github.com/francescmorales/jenkinsfiles.git")
 					}
 				}
 			}
