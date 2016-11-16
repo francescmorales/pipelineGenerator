@@ -70,7 +70,7 @@ envs.each{ env ->
           }
       }
   }
-  
-  //Run new pipeline
-  queue("${jobName}-${env}")
 }
+
+//Run new pipeline
+  queue("${jobName}-DEV")
