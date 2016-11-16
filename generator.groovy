@@ -43,26 +43,34 @@ def propsFile = new File("/var/jenkins_home/workspace/${pipelineFolderName}/prop
 propsFile.write(properties)
 
 //Create jobs for diferents envs
-envs.each{ env ->
+if(pipelineType.equals("Dockerfiles")){
+
+	// Time to create Job.
+  generatePipelineJob(jobName, pipelineType)
   
-  //Create view
-  listView("${pipelineFolderName}/${env}") {
-      jobs {
-        name("${pipelineName}-${env}")
-      }
-      columns {
-          status()
-          weather()
-          name()
-          lastSuccess()
-          lastFailure()
-          lastDuration()
-          buildButton()
-      }
-  }
+  //Run new pipeline
+  queue("${jobName}-DOCKER")
+}else{
+
+	envs.each{ env ->
+	  
+	  //Create view
+	  generateListViewJob(pipelineFolderName, pipelineName, env)
+	  
+	  // Time to create Job.
+	  generatePipelineJob(jobName, pipelineType, env)
+	}
+}
+	
+//Run new pipeline
+  queue("${jobName}-DEV")
   
-  // Time to create Job.
-  pipelineJob("${jobName}-${env}") {
+//---------------------FUNCTIONS---------------------//
+
+//generate pipeline job
+def generatePipelineJob(String jobName, String pipelineType, String env = "DOCKER"){
+
+	pipelineJob("${jobName}-${env}") {
       definition {
           cpsScm {
               scm{
@@ -70,14 +78,29 @@ envs.each{ env ->
                       branch("*/develop")
                       remote{
                           url("https://github.com/francescmorales/jenkinsfiles.git")
-                      }
-                  }
-              }
-              scriptPath("${pipelineType}/jenkinsfile")
-          }
-      }
-  }
+						}
+					}
+				}
+				scriptPath("${pipelineType}/jenkinsfile")
+			}
+		}
+	}
 }
 
-//Run new pipeline
-  queue("${jobName}-DEV")
+//generate list view job
+def generateListViewJob(String pipelineFolderName, String pipelineName, String env){
+	listView("${pipelineFolderName}/${env}") {
+	  jobs {
+		name("${pipelineName}-${env}")
+	  }
+	  columns {
+			status()
+			weather()
+			name()
+			lastSuccess()
+			lastFailure()
+			lastDuration()
+			buildButton()
+		}
+	}
+}
