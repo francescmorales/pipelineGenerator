@@ -9,6 +9,9 @@ def folders = pipelinePath.split(separator)
 //Environments list
 def envs = ["DEV","PRE","PRO","UAT"]
 
+//Environments parameters
+def envVarsMap = this.binding.variables
+
 // Create folders for the path
 def folderName
 def firstFolder = true
@@ -31,18 +34,13 @@ folder(pipelineFolderName){
 def jobName = pipelineFolderName + separator + pipelineName
 
 //Generate properties file
+def properties = ""
+envVarsMap.each{ envKey,envValue ->
+	properties = properties + "${envKey}=${envValue}\n"
+}
 new File("/var/jenkins_home/workspace/${pipelineFolderName}/properties").mkdirs()  
 def propsFile = new File("/var/jenkins_home/workspace/${pipelineFolderName}/properties/config.properties")
-propsFile.write("
-				gitURL=${gitURL}\n
-				pipelineType=${pipelineType}\n
-				pipelineName=${pipelineName}\n
-				pipelinePath=${pipelinePath}\n
-				slavePath=/home/jenkins/workspace/${jobName}\n
-				artifactoryUser=admin\n
-				artifactoryPassword=password\n
-				groupID=${GroupID}\n
-				artifactID=${ArtifactID}")
+propsFile.write(properties)
 
 //Create jobs for diferents envs
 envs.each{ env ->
