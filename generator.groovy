@@ -38,6 +38,11 @@ def properties = ""
 envVarsMap.each{ envKey,envValue ->
 	properties = properties + "${envKey}=${envValue}\n"
 }
+
+//additional properties
+properties = properties + "artifactoryUser=admin\n"
+properties = properties + "artifactoryPassword=password\n"
+
 new File("/var/jenkins_home/workspace/${pipelineFolderName}/properties").mkdirs()  
 def propsFile = new File("/var/jenkins_home/workspace/${pipelineFolderName}/properties/config.properties")
 propsFile.write(properties)
